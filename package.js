@@ -9,33 +9,32 @@
 
 Package.describe(
 {
-    name: 'm4dnation:meteor-event',
+    name: "m4dnation:meteor-event",
 
-    version: '0.0.1',
+    version: "0.0.2",
 
-    summary: 'Event package for MeteorJS Framework.',
+    summary: "Event package for MeteorJS Framework.",
 
-    git: 'https://github.com/M4dNation/meteor-event',
+    git: "https://github.com/M4dNation/meteor-event",
 
     documentation: ''
 });
 
 Package.onUse(function(api) 
 {
-    api.use(['ecmascript']);
+    api.use(["ecmascript"]);
 
-    api.mainModule('src/meteor-event.js');
+    api.mainModule("src/meteor-event.js", "server");
     
-    api.export('Dispatcher');
-    api.export('EventListener');
-    api.export('Event');
+    api.export("EventListener", "server");
+    api.export("Event", "server");
 });
 
 Package.onTest(function(api) 
 {
-    api.use(['ecmascript', 'practicalmeteor:mocha']);
+    api.use(["ecmascript", "practicalmeteor:mocha"]);
     
-    api.use('mm4dnation:meteor-event');
+    api.use("mm4dnation:meteor-event");
     
-    api.mainModule('tests/utils-tests.js');
+    api.mainModule("tests/meteor-event-tests.js");
 });
