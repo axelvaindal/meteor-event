@@ -1,11 +1,3 @@
-/*
-* TODO EVENT_LISTENER:
-* ---------------------------------------
-* - Allow Queueing
-* - Stopping propagation
- */
-
-
 class Dispatcher
 {
 	/**
@@ -40,9 +32,9 @@ class Dispatcher
 	*/
 	addListener(listener)
 	{
-		for (let i = 0; i < listener.listenTo.length; i++)
+		for (let i = 0, l = listener.listenTo.length; i < l; i++)
 		{
-			if (typeof this.listeners[listener.listenTo[i]] !== "[object array]")
+			if (!_.isArray(this.listeners[listener.listenTo[i]]))
 			{
 				this.listeners[listener.listenTo[i]] = [];
 			}
@@ -65,7 +57,10 @@ class Dispatcher
 
 		for (let i = 0, ls = this.listeners[event.name]; i < ls.length; i++)
 		{
-			ls[i].process(event);
+			if(ls[i].handle(event))
+			{
+				break;
+			}
 		}
 	}
 };
@@ -79,26 +74,16 @@ EventListener = class EventListener
     * This function is used in order to build the object.
     * @param {Object} options An object containing the description of the event listener.
     */
-	constructor(options)
+	constructor(name, listenTo)
 	{
-		if (this.isValid(options))
+		if (this.isValid(name, listenTo))
 		{
 			this.dispatcher = Dispatcher.getInstance();
-			this.name = options.name;
-			this.listenTo = options.listenTo;
-			this.handle = options.handle;
-		}
-	}
+			this.name = name;
+			this.listenTo = listenTo;
 
-	/**
-    * process
-    * This function is used in order to process after an event has been fired.
-    * @param {Event} event The fired event.
-    */
-	process(event)
-	{
-		this.handle(event);
-		event.do();
+			this.register();
+		}
 	}
 
 	/**
@@ -117,17 +102,13 @@ EventListener = class EventListener
     * @param {Object} options An object containing the description of the event listener.
     * @return {Boolean} True if the event description is valid, a Meteor Error otherwise.
     */
-	isValid(options)
+	isValid(name, listenTo)
 	{
-		if (!_.isString(options.name) || _.isEmpty(options.name))
+		if (!_.isString(name) || _.isEmpty(name))
 		{
 			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a name.");
 		}
-		else if (!_.isFunction(options.handle))
-		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a behavior.");
-		}
-		else if (!this.isValidTarget(options.listenTo))
+		else if (!this.isValidTarget(listenTo))
 		{
 			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a valid event to monitor.");
 		}
@@ -169,17 +150,17 @@ Event = class Event
 	/**
     * constructor
     * This function is used in order to build the object.
-    * @param {Object} options An object containing the description of the event.
+    * @param {String} name The event name.
     */
-	constructor(options)
+	constructor(name)
 	{
-		if (this.isValid(options))
+		if (!_.isString(name) || _.isEmpty(name))
 		{
-			this.dispatcher = Dispatcher.getInstance();
-			this.name = options.name;
-			this.do = options.do;
-			this.params = options.params;
+			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a name.");
 		}
+			
+		this.name = name;
+		this.dispatcher = Dispatcher.getInstance();
 	}
 
 	/**
@@ -189,31 +170,5 @@ Event = class Event
 	fire()
 	{
 		this.dispatcher.notify(this);
-	}
-
-	/**
-    * isValid
-    * This function is used in order to validate the event description.
-    * @param {Object} options An object containing the description of the event.
-    * @return {Boolean} True if the event description is valid, a Meteor Error otherwise.
-    */
-	isValid(options)
-	{
-		if (!_.isString(options.name) || _.isEmpty(options.name))
-		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a name.");
-		}
-		else if (!_.isFunction(options.do))
-		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a behavior.");
-		}
-		else if (!_.isObject(options.params) || {}.toString.call(options.params) !== "[object Object]")
-		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide parameters.");
-		}
-		else
-		{
-			return true;
-		}
 	}
 };

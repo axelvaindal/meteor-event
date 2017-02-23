@@ -15,26 +15,38 @@ This is exactly what you can do thanks to this package.
 
 Let's see how.
 
-First, you need to create a server file which will be used in order to make the listeners declaration.
+The package is based on two classes named `Event` and `EventListener` which provides basic behavior.
+Thus, you just have to inherit from these classes in order to create an Event Based Application.
 
 ```
 // in a listener.js file (server side only)
-
-const UserActionListener = new EventListener(
+export const UserActionListener = class UserActionListener extends EventListener
 {
-	name: "UserActionListener",
-	listenTo: ["user.register", "user.addEmail"],
 	handle(event)
 	{
-		console.log("I handle two events with a similar treatment.");
+		// here I can do whatever treatment is needed in order to handle the event
 	}
-});
+};
 
-UserActionListener.register();
+// in an event.js file (server side only)
+export const UserAddEmailEvent = class UserAddEmailEvent extends Event
+{
+	construtor(name, address)
+	{
+		super(name);
+		this.email = address;
+	}
+};
+
+// in the server.js file (or a startup file loaded server side)
+Meteor.startup(function()
+{
+	let listener = new UserActionListener("UserActionListener", ["user.addEmail"]);
+});
 
 ```
 
-Then, you just have to create an instance of an event (for example in the addEmail method of your application)
+Then, you just have to create an instance of the declared event (for example in the addEmail method of your application)
 and fire it to see the magic occurs.
 
 ```
@@ -45,24 +57,9 @@ Meteor.methods(
   	{
 		// here we check if the user can do the process...
 		
-		// if so, we can create our event instance
-		const AddEmailEvent = new Event(
-		{
-			name: "user.addEmail",
-			do()
-			{
-				console.log("I can do whatever treatment is needed.");
-				// Here you can call an Email API to send a specific email for example
-			},
-			params: 
-			{
-				userId: this.userId,
-				newEmail: email,
-			}
-		});
-
-		// Here I add the email and then I fire the event
-		AddEmailEvent.fire();
+		// if so, we can process the method, create our event instance and fire it
+		let event = new UserAddEmailEvent("user.addEmail", email);
+		event.fire();
   	}
 });
 ```
