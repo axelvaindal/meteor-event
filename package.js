@@ -34,7 +34,7 @@ Package.onTest(function(api)
 {
     api.use(["ecmascript", "practicalmeteor:mocha"]);
     
-    api.use("mm4dnation:meteor-event");
+    api.use("m4dnation:meteor-event");
     
     api.mainModule("tests/meteor-event-tests.js");
 });
