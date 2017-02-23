@@ -2,6 +2,7 @@
 * TODO EVENT_LISTENER:
 * ---------------------------------------
 * - Allow Queueing
+* - Stopping propagation
  */
 
 
