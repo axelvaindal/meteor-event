@@ -69,7 +69,7 @@ Meteor.methods(
 
 ## AUTHORS
 
-Yggdrasill is maintained by M4dNation Company.
+meteor-event is maintained by M4dNation Company.
 
 Contributors are : M4dNation teammates and others.
 
