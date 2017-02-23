@@ -74,13 +74,13 @@ EventListener = class EventListener
     * This function is used in order to build the object.
     * @param {Object} options An object containing the description of the event listener.
     */
-	constructor(name, listenTo)
+	constructor(options)
 	{
-		if (this.isValid(name, listenTo))
+		if (this.isValid(options))
 		{
 			this.dispatcher = Dispatcher.getInstance();
-			this.name = name;
-			this.listenTo = listenTo;
+			this.name = options.name;
+			this.listenTo = options.listenTo;
 
 			this.register();
 		}
@@ -102,13 +102,13 @@ EventListener = class EventListener
     * @param {Object} options An object containing the description of the event listener.
     * @return {Boolean} True if the event description is valid, a Meteor Error otherwise.
     */
-	isValid(name, listenTo)
+	isValid(options)
 	{
-		if (!_.isString(name) || _.isEmpty(name))
+		if (!_.isString(options.name) || _.isEmpty(options.name))
 		{
 			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a name.");
 		}
-		else if (!this.isValidTarget(listenTo))
+		else if (!this.isValidTarget(options.listenTo))
 		{
 			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a valid event to monitor.");
 		}
