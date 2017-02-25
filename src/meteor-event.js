@@ -1,5 +1,7 @@
 class Dispatcher
 {
+	static _dispatcher;
+
 	/**
     * constructor
     * This function is used in order to build the object.
@@ -8,11 +10,6 @@ class Dispatcher
     */
 	constructor()
 	{
-		if (dispatcher)
-		{
-			return dispatcher;
-		}
-
 		this.listeners = [];
 	}
 
@@ -22,7 +19,10 @@ class Dispatcher
 	*/
 	static getInstance()
 	{
-		return new Dispatcher();
+		if (_dispatcher === undefined)
+			_dispatcher = new Dispatcher();
+		
+		return _dispatcher;
 	}
 
 	/**
