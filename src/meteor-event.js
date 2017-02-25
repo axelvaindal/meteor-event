@@ -130,7 +130,7 @@ EventListener = class EventListener
     * isValid
     * This function is used in order to validate the event listener description.
     * @param {Object} options An object containing the description of the event listener.
-    * @return {Boolean} True if the event description is valid, a Meteor Error otherwise.
+    * @return {Boolean} True if the event description is valid, a TypeError otherwise.
     */
 	_isValid(options)
 	{
@@ -150,7 +150,7 @@ EventListener = class EventListener
     * isValidTarget
     * This function is used in order to validate the target(s) of the listener.
     * @param {Array} listenTo An array containing the name of the events to monitor.
-    * @return {Boolean} True if the event target is valid, false otherwis.
+    * @return {Boolean} True if the event target is valid, false otherwise.
     */
 	_isValidTarget(listenTo)
 	{
@@ -196,7 +196,7 @@ Event = class Event
 
 	/**
     * fire
-    * This function is used in order to alert the dispatcher about an occuring event.
+    * This function is used in order to alert the dispatcher about an occurring event.
     */
 	fire()
 	{
