@@ -1,7 +1,7 @@
 # meteor-event
 
 ## ABOUT
-An event based declaration package for MeteorJS.
+An event based declaration package for [**Meteor**](https://www.meteor.com).
 
 ## DESCRIPTION
 
@@ -9,8 +9,8 @@ If you have ever worked with some PHP frameworks such as Symphony or Laravel bef
 a lot of things are handled thanks to Event Based Declaration.
 
 The idea is simple: you fire an event and you have a class which is able to handle it and process things.   
-This is very useful when you have to process similar treaments in different part of your application whenever something occurs.   
-For example, you may have to send a notification email each time a user is doing some specific treament.
+This is very useful when you have to process similar treatments in different part of your application whenever something occurs.   
+For example, you may have to send a notification email each time a user is doing some specific treatment.
 
 This is exactly what you can do thanks to this package.
 
