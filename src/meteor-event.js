@@ -9,12 +9,15 @@ class Dispatcher
 	constructor()
 	{
 		this.listeners = [];
+		this.queue = [];
+
+		this.monitor();
 	}
 
 	/**
 	* getInstance
 	* This function is used in order to implement the Singleton pattern in the following classes.
-	* NOTE:This behavior suggests this class should actually be handled
+	* NOTE: This behavior suggests this class should actually be handled
     * by the Meteor object considering it only registers the different listeners.
     * @return {Dispatcher} The instance of the Dispatcher Singleton Class.
 	*/
@@ -51,7 +54,6 @@ class Dispatcher
 	*/
 	notify(event)
 	{
-		let stopPropagation = false;
 		if(_.isUndefined(this.listeners[event.name]))
 		{
 			throw new ReferenceError("There is no event listener registered for the event named " + event.name + ".");
@@ -59,17 +61,84 @@ class Dispatcher
 
 		for (let i = 0, ls = this.listeners[event.name]; i < ls.length; i++)
 		{
-			if (ls[i]._hasBeforeHook)
-				ls[i].beforeHandle(event);
+			if (ls[i].shouldQueue)
+			{
+				this.queueProcess(ls[i], event);
+				continue;	
+			}
 
-			stopPropagation = ls[i].handle(event);
-
-			if (ls[i]._hasAfterHook)
-				ls[i].afterHandle(event);
-
-			if (stopPropagation)
+			if (this.process(ls[i], event))
 				break;
 		}
+	}
+
+	/**
+	* process
+	* This function is used in order to execute a listener treatment on the event.
+	* @param {EventListener} listener An instance of EventListener
+	* @param {Event} event An instance of Event
+	* @return {Boolean} True if the event should be propagated to the next listener, false otherwise
+	*/
+	process(listener, event)
+	{
+		let stopPropagation = false;
+
+		if (listener._hasBeforeHook)
+			listener.beforeHandle(event);
+
+		stopPropagation = listener.handle(event);
+
+		if (listener._hasAfterHook)
+			listener.afterHandle(event);
+
+		return stopPropagation;
+	}
+
+	/**
+	* monitor
+	* This function is used in order to monitor queued event listener.
+	*/
+	monitor()
+	{
+		this._running = Meteor.setInterval(this.executeQueuedProcess.bind(this), 5000);
+	}
+
+	/**
+	* stopMonitoring
+	* This function is used in order to stop monitoring queued event listener.
+	*/
+	stopMonitoring()
+	{
+		Meteor.clearInterval(this._running);
+		this._running = undefined;
+	}
+
+	/**
+	* executeQueuedProcess
+	* This function is used in order to process queued event listener.
+	*/
+	executeQueuedProcess()
+	{
+		let operator = this.queue.shift();
+
+		if (!_.isUndefined(operator))
+			this.process(operator.listener, operator.event);
+	}
+
+	/**
+	* queueProcess
+	* This function is used in order to queue an EventListener instance process.
+	* @param {EventListener} listener An instance of EventListener
+	* @param {Event} event An instance of Event
+	*/
+	queueProcess(listener, event)
+	{
+		let operator = {
+			listener : listener,
+			event: event
+		};
+
+		this.queue.push(operator);
 	}
 };
 
@@ -111,6 +180,7 @@ EventListener = class EventListener
 			this._dispatcher = Dispatcher.getInstance();
 			this.name = options.name;
 			this.listenTo = options.listenTo;
+			this.shouldQueue = options.shouldQueue ? options.shouldQueue : false;
 
 			this.register();
 		}
