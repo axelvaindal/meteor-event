@@ -31,6 +31,7 @@ export const UserActionListener = class UserActionListener extends EventListener
 		{
 			name: "UserActionListener", 
 			listenTo: ["user.addEmail"]
+			shouldQueue: false, // If this is set to true, the process is queued
 		});
 	}
 

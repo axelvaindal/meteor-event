@@ -74,10 +74,10 @@ class Dispatcher
 
 	/**
 	* process
-	* This function is used in order to execute a listener treatment on the event.
+	* This function is used in order to execute an EventListener treatment on an Event.
 	* @param {EventListener} listener An instance of EventListener
 	* @param {Event} event An instance of Event
-	* @return {Boolean} True if the event should be propagated to the next listener, false otherwise
+	* @return {Boolean} True if the event should not be propagated to the next listener, false otherwise
 	*/
 	process(listener, event)
 	{
@@ -96,7 +96,7 @@ class Dispatcher
 
 	/**
 	* monitor
-	* This function is used in order to monitor queued event listener.
+	* This function is used in order to monitor queued EventListener.
 	*/
 	monitor()
 	{
@@ -105,7 +105,7 @@ class Dispatcher
 
 	/**
 	* stopMonitoring
-	* This function is used in order to stop monitoring queued event listener.
+	* This function is used in order to stop monitoring queued EventListener.
 	*/
 	stopMonitoring()
 	{
@@ -115,7 +115,7 @@ class Dispatcher
 
 	/**
 	* executeQueuedProcess
-	* This function is used in order to process queued event listener.
+	* This function is used in order to process queued EventListener.
 	*/
 	executeQueuedProcess()
 	{
@@ -127,7 +127,7 @@ class Dispatcher
 
 	/**
 	* queueProcess
-	* This function is used in order to queue an EventListener instance process.
+	* This function is used in order to queue an EventListener's instance process.
 	* @param {EventListener} listener An instance of EventListener
 	* @param {Event} event An instance of Event
 	*/
@@ -188,7 +188,7 @@ EventListener = class EventListener
 
 	/**
     * register
-    * This function is used in order to alert the dispatcher he has to notify a new event listener
+    * This function is used in order to alert the dispatcher he has to notify this EventListener whenever an event occurs.
     * whenever an event occurs.
     */
 	register()
@@ -198,9 +198,9 @@ EventListener = class EventListener
 
 	/**
     * isValid
-    * This function is used in order to validate the event listener description.
+    * This function is used in order to validate the EventListener description.
     * @param {Object} options An object containing the description of the event listener.
-    * @return {Boolean} True if the event description is valid, a TypeError otherwise.
+    * @return {Boolean} True if the EventListener description is valid, a Javascript TypeError otherwise.
     */
 	_isValid(options)
 	{
