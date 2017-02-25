@@ -5,8 +5,6 @@ class Dispatcher
 	/**
     * constructor
     * This function is used in order to build the object.
-    * NOTE: There is a Singleton pattern here. This behavior suggests this class should actually be handled
-    * by the Meteor object considering it only registers the different listeners.
     */
 	constructor()
 	{
@@ -16,6 +14,9 @@ class Dispatcher
 	/**
 	* getInstance
 	* This function is used in order to implement the Singleton pattern in the following classes.
+	* NOTE:This behavior suggests this class should actually be handled
+    * by the Meteor object considering it only registers the different listeners.
+    * @return {Dispatcher} The instance of the Dispatcher Singleton Class.
 	*/
 	static getInstance()
 	{
