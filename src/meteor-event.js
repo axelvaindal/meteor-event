@@ -28,8 +28,8 @@ class Dispatcher
 
 	/**
 	* addListener
-	* This function is used in order to add a new registered listener.
-	* @param {EventListener} listener An instance of an event listener
+	* This function is used in order to register a new EventListener.
+	* @param {EventListener} listener An instance of EventListener
 	*/
 	addListener(listener)
 	{
@@ -46,8 +46,8 @@ class Dispatcher
 
 	/**
 	* notify
-	* This function is used in order to notify every listener an event has occured.
-	* @param {Event} event An instance of an event
+	* This function is used in order to notify every EventListener registered an Event has been fired.
+	* @param {Event} event An instance of Event
 	*/
 	notify(event)
 	{
