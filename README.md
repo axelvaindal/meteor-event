@@ -22,7 +22,7 @@ Thus, you just have to inherit from these classes in order to create an Event Ba
 All of this is only available server-side (you cannot use this package in a Blaze Template or a React component).
 
 ```
-// in an listeners.js file (server side only)
+// in an eventlistener.js file (server side only)
 export const UserActionListener = class UserActionListener extends EventListener
 {
 	constructor()
@@ -46,7 +46,7 @@ export const UserActionListener = class UserActionListener extends EventListener
 	}
 };
 
-// in an events.js file (server side only)
+// in an event.js file (server side only)
 export const UserAddEmailEvent = class UserAddEmailEvent extends Event
 {
 	construtor(options)
@@ -76,12 +76,15 @@ Meteor.methods(
 		// here we check if the user can do the process...
 		
 		// if so, we can process the method, create our event instance and fire it
-		let event = new UserAddEmailEvent(
+		if (Meteor.isServer)
 		{
-			name: "test",
-			address: email
-		});
-		event.fire();
+			let event = new UserAddEmailEvent(
+			{
+				name: "test",
+				address: email
+			});
+			event.fire();
+		}
   	}
 });
 ```
