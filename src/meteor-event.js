@@ -50,22 +50,29 @@ class Dispatcher
 	*/
 	notify(event)
 	{
+		let stopPropagation = false;
 		if(_.isUndefined(this.listeners[event.name]))
 		{
-			throw new Meteor.Error("RUNTIME_ERROR", "There is no event listener registered for the event named " + event.name + ".");
+			throw new ReferenceError("There is no event listener registered for the event named " + event.name + ".");
 		}
 
 		for (let i = 0, ls = this.listeners[event.name]; i < ls.length; i++)
 		{
-			if(ls[i].handle(event))
-			{
+			if (ls[i]._hasBeforeHook)
+				ls[i].beforeHandle(event);
+
+			stopPropagation = ls[i].handle(event);
+
+			if (ls[i]._hasAfterHook)
+				ls[i].afterHandle(event);
+
+			if (stopPropagation)
 				break;
-			}
 		}
 	}
 };
 
-dispatcher = new Dispatcher();
+dispatcher = Dispatcher.getInstance();
 
 EventListener = class EventListener
 {
@@ -76,9 +83,31 @@ EventListener = class EventListener
     */
 	constructor(options)
 	{
-		if (this.isValid(options))
+		if (this.constructor.name === "EventListener")
+			throw new TypeError("Event Listener is abstract.");
+
+		if (!_.isFunction(this.handle))
+			throw new TypeError(this.constructor.name + " must override the handle method.");
+
+		if (!_.isUndefined(this.beforeHandle))
 		{
-			this.dispatcher = Dispatcher.getInstance();
+			if (!_.isFunction(this.beforeHandle))
+				throw new TypeError("beforeHandle must be a method.");
+
+			this._hasBeforeHook = true;
+		}
+
+		if (!_.isUndefined(this.afterHandle))
+		{
+			if (!_.isFunction(this.afterHandle))
+				throw new TypeError("afterHandle must be a method.");
+
+			this._hasAfterHook = true;
+		}
+
+		if (this._isValid(options))
+		{
+			this._dispatcher = Dispatcher.getInstance();
 			this.name = options.name;
 			this.listenTo = options.listenTo;
 
@@ -93,7 +122,7 @@ EventListener = class EventListener
     */
 	register()
 	{
-		this.dispatcher.addListener(this);	
+		this._dispatcher.addListener(this);	
 	}
 
 	/**
@@ -102,20 +131,18 @@ EventListener = class EventListener
     * @param {Object} options An object containing the description of the event listener.
     * @return {Boolean} True if the event description is valid, a Meteor Error otherwise.
     */
-	isValid(options)
+	_isValid(options)
 	{
 		if (!_.isString(options.name) || _.isEmpty(options.name))
 		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a name.");
+			throw new TypeError("EventListener name must be a string.");
 		}
-		else if (!this.isValidTarget(options.listenTo))
+		else if (!this._isValidTarget(options.listenTo))
 		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a valid event to monitor.");
+			throw new TypeError("EventListener listenTo must be a String[*].");
 		}
-		else
-		{
-			return true;
-		}
+
+		return true;
 	}
 
 	/**
@@ -124,7 +151,7 @@ EventListener = class EventListener
     * @param {Array} listenTo An array containing the name of the events to monitor.
     * @return {Boolean} True if the event target is valid, false otherwis.
     */
-	isValidTarget(listenTo)
+	_isValidTarget(listenTo)
 	{
 		if (_.isArray(listenTo))
 		{
@@ -154,13 +181,16 @@ Event = class Event
     */
 	constructor(name)
 	{
+		if (this.constructor.name === "Event")
+			throw new TypeError("Event is abstract.");
+
 		if (!_.isString(name) || _.isEmpty(name))
 		{
-			throw new Meteor.Error("SYNTAX_ERROR", "You must provide a name.");
+			throw new TypeError("EventListener name must be a string.");
 		}
-			
+
 		this.name = name;
-		this.dispatcher = Dispatcher.getInstance();
+		this._dispatcher = Dispatcher.getInstance();
 	}
 
 	/**
@@ -169,6 +199,6 @@ Event = class Event
     */
 	fire()
 	{
-		this.dispatcher.notify(this);
+		this._dispatcher.notify(this);
 	}
 };
