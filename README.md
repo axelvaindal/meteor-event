@@ -23,7 +23,9 @@ All of this is only available server-side (you cannot use this package in a Blaz
 
 ```
 // in an eventlistener.js file (server side only)
-export const UserActionListener = class UserActionListener extends EventListener
+import { EventListener }  from 'meteor/m4dnation:meteor-event';
+
+export class UserActionListener extends EventListener
 {
 	constructor()
 	{
@@ -48,7 +50,9 @@ export const UserActionListener = class UserActionListener extends EventListener
 };
 
 // in an event.js file (server side only)
-export const UserAddEmailEvent = class UserAddEmailEvent extends Event
+import { Event } from 'meteor/m4dnation:meteor-event';
+
+export class UserAddEmailEvent extends Event
 {
 	construtor(options)
 	{
