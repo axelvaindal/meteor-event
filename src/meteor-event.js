@@ -144,7 +144,7 @@ class Dispatcher
 
 dispatcher = Dispatcher.getInstance();
 
-EventListener = class EventListener
+export class EventListener
 {
 	/**
     * constructor
@@ -243,7 +243,7 @@ EventListener = class EventListener
 	}
 };
 
-Event = class Event 
+export class Event 
 {
 	/**
     * constructor

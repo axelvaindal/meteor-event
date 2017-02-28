@@ -11,7 +11,7 @@ Package.describe(
 {
     name: "m4dnation:meteor-event",
 
-    version: "1.0.0",
+    version: "1.0.1",
 
     summary: "Event package for MeteorJS Framework.",
 
@@ -25,9 +25,6 @@ Package.onUse(function(api)
     api.use(["ecmascript"]);
 
     api.mainModule("src/meteor-event.js", "server");
-    
-    api.export("EventListener", "server");
-    api.export("Event", "server");
 });
 
 Package.onTest(function(api) 
