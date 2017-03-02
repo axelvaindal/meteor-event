@@ -83,12 +83,12 @@ class Dispatcher
 	{
 		let stopPropagation = false;
 
-		if (listener._hasBeforeHook)
+		if (listener.hasBeforeHook)
 			listener.beforeHandle(event);
 
 		stopPropagation = listener.handle(event);
 
-		if (listener._hasAfterHook)
+		if (listener.hasAfterHook)
 			listener.afterHandle(event);
 
 		return stopPropagation;
@@ -184,6 +184,28 @@ export class EventListener
 
 			this.register();
 		}
+	}
+
+	/**
+    * hasBeforeHook
+    * @getter
+    * This function is used in order to know if the listener has a before handle method.
+    * @return {Boolean} Whether or not the listener has a before handle method.
+    */
+	get hasBeforeHook()
+	{
+		return this._hasBeforeHook;
+	}
+
+	/**
+    * hasAfterHook
+    * @getter
+    * This function is used in order to know if the listener has an after handle method.
+    * @return {Boolean} Whether or not the listener has an after handle method.
+    */
+	get hasAfterHook()
+	{
+		return this._hasAfterHook;
 	}
 
 	/**
