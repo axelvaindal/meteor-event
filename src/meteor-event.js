@@ -166,6 +166,10 @@ export class EventListener
 
 			this._hasBeforeHook = true;
 		}
+		else 
+		{
+			this._hasBeforeHook = false;
+		}
 
 		if (!_.isUndefined(this.afterHandle))
 		{
@@ -173,6 +177,10 @@ export class EventListener
 				throw new TypeError("afterHandle must be a method.");
 
 			this._hasAfterHook = true;
+		}
+		else 
+		{
+			this._hasAfterHook = false;
 		}
 
 		if (this._isValid(options))
