@@ -1,6 +1,5 @@
 # meteor-event
 
-## ABOUT
 An event based declaration package for [**Meteor**](https://www.meteor.com).
 
 ## DESCRIPTION
