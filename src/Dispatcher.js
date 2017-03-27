@@ -111,7 +111,8 @@ export class Dispatcher
 	*/
 	monitor()
 	{
-		this._running = Meteor.setInterval(this.executeQueuedProcess.bind(this), 5000);
+		let interval = Meteor.settings.private.event_queueInterval ? Meteor.settings.private.event_queueInterval : 5000;
+		this._running = Meteor.setInterval(this.executeQueuedProcess.bind(this), interval);
 	}
 
 	/**
