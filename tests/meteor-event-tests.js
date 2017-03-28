@@ -26,22 +26,7 @@ describe("meteor-event Package", function()
 	{
 		it("Should be able to inherit from the EventListener class.", function()
 		{
-			let c = class CustomEvent extends Event {};
-			
+			let c = class CustomEventListener extends EventListener {};
 		});
-	});
-
-	describe("Dispatcher related", function()
-	{
-		it("Should be able to inherit from the EventListener class.", function()
-		{
-			let c = class CustomEvent extends Event {};
-			
-		});
-	});
-
-	describe("Usage related", function()
-	{
-
 	});
 });
