@@ -19,6 +19,10 @@ export class Dispatcher
     */
 	constructor()
 	{
+
+		if (this.constructor !== Dispatcher)
+			throw new TypeError("Subclassing is not allowed. Dispatcher is final.")
+		
 		this.listeners = [];
 		this.queue = [];
 

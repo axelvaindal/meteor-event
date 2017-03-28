@@ -20,7 +20,7 @@ export class Event
     */
 	constructor(name)
 	{
-		if (this.constructor.name === "Event")
+		if (this.constructor === Event)
 			throw new TypeError("Event is abstract.");
 
 		if (!_.isString(name) || _.isEmpty(name))

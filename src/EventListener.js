@@ -20,7 +20,7 @@ export class EventListener
     */
 	constructor(options)
 	{
-		if (this.constructor.name === "EventListener")
+		if (this.constructor === EventListener)
 			throw new TypeError("Event Listener is abstract.");
 
 		if (!_.isFunction(this.handle))
