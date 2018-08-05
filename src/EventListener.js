@@ -1,10 +1,9 @@
 import { Meteor } from "meteor/meteor";
+import { Obj, Collection } from "jstoolbox";
 
 export class EventListener
 {
 	/**
-    * constructor
-    * This function is used in order to build the object.
     * @param {Object} options An object containing the description of the event listener.
     */
 	constructor(options)
@@ -12,74 +11,50 @@ export class EventListener
 		if (this.constructor === EventListener)
 			throw new TypeError("Event Listener is abstract.");
 
-		if (!_.isFunction(this.handle))
+		if (!Obj.isFunction(this.handle))
 			throw new TypeError(this.constructor.name + " must override the handle method.");
 
-		if (!_.isUndefined(this.beforeHandle))
-		{
-			if (!_.isFunction(this.beforeHandle))
-				throw new TypeError("beforeHandle must be a method.");
+		if (!Obj.isUndefined(this.beforeHandle) && !Obj.isFunction(this.beforeHandle))
+			throw new TypeError("beforeHandle must be a function.");
 
-			this._hasBeforeHook = true;
-		}
-		else 
-		{
-			this._hasBeforeHook = false;
-		}
-
-		if (!_.isUndefined(this.afterHandle))
-		{
-			if (!_.isFunction(this.afterHandle))
-				throw new TypeError("afterHandle must be a method.");
-
-			this._hasAfterHook = true;
-		}
-		else 
-		{
-			this._hasAfterHook = false;
-		}
+		if (!Obj.isUndefined(this.afterHandle) && !Obj.isFunction(this.afterHandle))
+			throw new TypeError("afterHandle must be a function.");
 
 		if (this._isValid(options))
 		{
-			this._dispatcher = Dispatcher.getInstance();
 			this.name = options.name;
-			this.listenTo = options.listenTo;
+			this.listen = options.listen;
 			this.shouldQueue = options.shouldQueue ? options.shouldQueue : false;
 
-			this.register();
+			if (!options.autoRegister)
+				this.register();
 		}
 	}
 
 	/**
-    * hasBeforeHook
-    * @getter
     * This function is used in order to know if the listener has a before handle method.
     * @return {Boolean} Whether or not the listener has a before handle method.
     */
-	get hasBeforeHook()
+	hasBeforeHook()
 	{
-		return this._hasBeforeHook;
+		return Obj.isFunction(this.beforeHandle);
 	}
 
 	/**
-    * hasAfterHook
-    * @getter
     * This function is used in order to know if the listener has an after handle method.
     * @return {Boolean} Whether or not the listener has an after handle method.
     */
-	get hasAfterHook()
+	hasAfterHook()
 	{
-		return this._hasAfterHook;
+		return Obj.isFunction(this.afterHandle);
 	}
 
 	/**
-    * register
     * This function is used in order to alert the dispatcher he has to notify this EventListener whenever an event occurs.
-    * whenever an event occurs.
     */
 	register()
 	{
-		this._dispatcher.addListener(this);	
+		Meteor._addEventListener(this);	
 	}
 
 	/**
@@ -90,14 +65,10 @@ export class EventListener
     */
 	_isValid(options)
 	{
-		if (!_.isString(options.name) || _.isEmpty(options.name))
-		{
-			throw new TypeError("EventListener name must be a string.");
-		}
-		else if (!this._isValidTarget(options.listenTo))
-		{
-			throw new TypeError("EventListener listenTo must be a String[*].");
-		}
+		if (!Obj.isString(options.name) || Obj.isFalsy(options.name))
+			throw new TypeError("EventListener name must be a non-empty string.");
+		else if (!this._isValidTarget(options.listen))
+			throw new TypeError("EventListener must listen to at least one event.");
 
 		return true;
 	}
@@ -108,21 +79,18 @@ export class EventListener
     * @param {Array} listenTo An array containing the name of the events to monitor.
     * @return {Boolean} True if the event target is valid, false otherwise.
     */
-	_isValidTarget(listenTo)
+	_isValidTarget(listen)
 	{
-		if (_.isArray(listenTo))
-		{
-			for (let i = 0, l = listenTo.length; i < l; i++)
-			{
-				if (!_.isString(listenTo[i]) || _.isEmpty(listenTo[i]))
-				{
-					return false;
-				}
-			}
-		}
-		else
-		{
+		if (!Obj.isArray(listen))
 			return false;
+
+		if (Collection.isEmpty(listen))
+			return false;
+
+		for (let eventName of listen)
+		{
+			if (!Obj.isString(eventName) || Obj.isFalsy(eventName))
+				return false;
 		}
 
 		return true;

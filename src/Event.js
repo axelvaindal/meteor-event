@@ -1,9 +1,9 @@
+import { Obj } from "jstoolbox";
 import { Meteor } from "meteor/meteor";
 
 export class Event 
 {
 	/**
-    * This function is used in order to build the object.
     * @param {String} name The event name.
     */
 	constructor(name)
@@ -18,11 +18,10 @@ export class Event
 	}
 
 	/**
-    * fire
-    * This function is used in order to alert the dispatcher about an occurring event.
+    * Alert the dispatcher about an occurring event.
     */
 	fire()
 	{
-		Meteor._notifyEventListener(this);
+		Meteor._notifyEventListeners(this);
 	}
 };

@@ -22,14 +22,3 @@ Package.onUse(function(api)
 
     api.mainModule("src/meteor-event.js", "server");
 });
-
-Package.onTest(function(api) 
-{
-	api.versionsFrom("1.7.0.3");
-
-    api.use(["ecmascript", "practicalmeteor:mocha"]);
-    
-    api.use("m4dnation:meteor-event");
-    
-    api.mainModule("tests/meteor-event-tests.js");
-});

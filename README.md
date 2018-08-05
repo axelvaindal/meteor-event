@@ -4,10 +4,9 @@ An event based declaration package for [**Meteor**](https://www.meteor.com).
 
 ## DESCRIPTION
 
-If you have ever worked with some PHP frameworks such as Symphony or Laravel before using Meteor, you must have notice
-a lot of things are handled thanks to Event Based Declaration.
+If you have ever worked with some PHP frameworks such as Symphony or Laravel before using Meteor, you must have notice a lot of things are handled thanks to event based declarations.
 
-The idea is simple: you fire an event and you have a class which is able to handle it and process things.   
+The idea is simple: you fire an event and you have a class able to handle it and process things.   
 This is very useful when you have to process similar treatments in different part of your application whenever something occurs.   
 For example, you may have to send a notification email each time a user is doing some specific treatment.
 
@@ -31,8 +30,9 @@ export class UserActionListener extends EventListener
 		super(
 		{
 			name: "UserActionListener", 
-			listenTo: ["user.addEmail"]
+			listenTo: ["user.addEmail"],
 			shouldQueue: false, // If this is set to true, the process is queued
+			autoRegister: true  // If this is set to false, you have to manually register the listener
 		});
 	}
 
@@ -53,7 +53,7 @@ import { Event } from 'meteor/m4dnation:meteor-event';
 
 export class UserAddEmailEvent extends Event
 {
-	construtor(options)
+	constructor(options)
 	{
 		super(options.name);
 		this.email = options.address;
@@ -63,13 +63,13 @@ export class UserAddEmailEvent extends Event
 // in the server.js file (or a startup file loaded server side)
 Meteor.startup(function()
 {
+	// The instanciation is enough because autoRegister is set to true by default.
 	let listener = new UserActionListener();
 });
 
 ```
 
-Then, you just have to create an instance of the declared event (for example in the addEmail method of your application)
-and fire it to see the magic occurs.
+Then, you just have to create an instance of the declared event (for example in an `addEmail` method of your application) and fire it to see the magic occurs.
 
 ```
 // in a method.js file 
@@ -87,6 +87,7 @@ Meteor.methods(
 				name: "test",
 				address: email
 			});
+
 			event.fire();
 		}
   	}
