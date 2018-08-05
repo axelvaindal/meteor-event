@@ -26,7 +26,7 @@ export class EventListener
 			this.listen = options.listen;
 			this.shouldQueue = options.shouldQueue ? options.shouldQueue : false;
 
-			if (!options.autoRegister)
+			if (!options.disableAutoRegister)
 				this.register();
 		}
 	}

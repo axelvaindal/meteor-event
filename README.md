@@ -32,7 +32,7 @@ export class UserActionListener extends EventListener
 			name: "UserActionListener", 
 			listenTo: ["user.addEmail"],
 			shouldQueue: false, // If this is set to true, the process is queued
-			autoRegister: true  // If this is set to false, you have to manually register the listener
+			disableAutoRegister: true  // If this is set to false, you have to manually register the listener
 		});
 	}
 
