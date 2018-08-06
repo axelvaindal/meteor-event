@@ -4,8 +4,9 @@ import { Obj, Collection } from "jstoolbox";
 export class EventListener
 {
 	/**
-    * @param {Object} options An object containing the description of the event listener.
-    */
+     * Create an EventListener to handle event occuring.
+     * @param	{PlainObject}	options		The configuration options of the listener
+     */
 	constructor(options)
 	{
 		if (this.constructor === EventListener)
@@ -32,8 +33,8 @@ export class EventListener
 	}
 
 	/**
-    * This function is used in order to know if the listener has a before handle method.
-    * @return {Boolean} Whether or not the listener has a before handle method.
+    * Evaluate if the listener has a before handle method.
+    * @returns	{Boolean}	Whether or not the listener has a before handle method
     */
 	hasBeforeHook()
 	{
@@ -41,8 +42,8 @@ export class EventListener
 	}
 
 	/**
-    * This function is used in order to know if the listener has an after handle method.
-    * @return {Boolean} Whether or not the listener has an after handle method.
+    * Evaluate if the listener has an after handle method.
+    * @returns	{Boolean}	Whether or not the listener has an after handle method
     */
 	hasAfterHook()
 	{
@@ -50,7 +51,7 @@ export class EventListener
 	}
 
 	/**
-    * This function is used in order to alert the dispatcher he has to notify this EventListener whenever an event occurs.
+    * Register the listener to notify it whenever an event occurs.
     */
 	register()
 	{
@@ -58,10 +59,10 @@ export class EventListener
 	}
 
 	/**
-    * isValid
-    * This function is used in order to validate the EventListener description.
-    * @param {Object} options An object containing the description of the event listener.
-    * @return {Boolean} True if the EventListener description is valid, a Javascript TypeError otherwise.
+    * Evaluate if the options of the event listener are valid or not.
+	* @private
+    * @param	{PlainObject}	options		The configuration options of the event listener
+    * @returns 	{Boolean} 					True if the options are valid, false otherwise
     */
 	_isValid(options)
 	{
@@ -74,17 +75,14 @@ export class EventListener
 	}
 
 	/**
-    * isValidTarget
-    * This function is used in order to validate the target(s) of the listener.
-    * @param {Array} listenTo An array containing the name of the events to monitor.
-    * @return {Boolean} True if the event target is valid, false otherwise.
+    * Evaluate if the target of the event listener is valid or not.
+	* @private
+    * @param	{Array}		listen	An array containing the name of the events to handle
+    * @returns 	{Boolean} 			True if the event listener targets are valid, false otherwise
     */
 	_isValidTarget(listen)
 	{
-		if (!Obj.isArray(listen))
-			return false;
-
-		if (Collection.isEmpty(listen))
+		if (!Obj.isArray(listen) || Collection.isEmpty(listen))
 			return false;
 
 		for (let eventName of listen)

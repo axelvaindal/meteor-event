@@ -4,8 +4,9 @@ import { Meteor } from "meteor/meteor";
 export class Event 
 {
 	/**
-    * @param {String} name The event name.
-    */
+     * Create an Event to emit.
+     * @param	{String}	name	The name of the event
+     */
 	constructor(name)
 	{
 		if (this.constructor === Event)
