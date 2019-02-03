@@ -49,6 +49,15 @@
           "jest",
           "jasmine"
         ]
+      },
+      {
+        "files": [
+          "package.js"
+        ],
+        "globals": [
+          "Package",
+          "Npm"
+        ]
       }
     ]
   }

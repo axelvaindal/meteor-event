@@ -12,7 +12,7 @@ Npm.depends({
   jstoolbox: "1.0.2",
 });
 
-Package.onUse(function(api) {
+Package.onUse(api => {
   api.versionsFrom("1.8.0.2");
 
   api.use(["ecmascript"]);

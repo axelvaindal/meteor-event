@@ -1,23 +1,23 @@
-import { Obj } from "jstoolbox";
-import { Meteor } from "meteor/meteor";
+import { Obj } from "jstoolbox"; // eslint-disable-line import/no-unresolved
+import { Meteor } from "meteor/meteor"; // eslint-disable-line import/no-unresolved
 
-import { Event } from "./Event.js";
-import { EventListener } from "./EventListener.js";
+import { Event } from "./event";
+import { EventListener } from "./event-listener";
 
 Meteor._eventListeners = [];
 Meteor._queuedEvents = [];
 
 /**
  * Get all event listeners listening to a specific event.
- * @param   {String}    eventName   The name of the event 
- * @returns {Array}                 All listeners tracking the wanted event
+ * @param   {String}    eventName   The name of the event
+ * @return  {Array}                 All listeners tracking the wanted event
  */
-Meteor.getEventListeners = function(eventName)
-{
-    if (!Obj.isArray(Meteor._eventListeners[eventName]))
-        return null;
+Meteor.getEventListeners = function(eventName) {
+  if (!Obj.isArray(Meteor._eventListeners[eventName])) {
+    return [];
+  }
 
-    return Meteor._eventListeners[eventName];
+  return Meteor._eventListeners[eventName];
 };
 
 /**
@@ -25,15 +25,14 @@ Meteor.getEventListeners = function(eventName)
  * @private
  * @param   {EventListener}     listener   The event listener to add
  */
-Meteor._addEventListener = function(listener)
-{
-    for (let target of listener.listen)
-    {
-        if (!Obj.isArray(Meteor._eventListeners[target]))
-            Meteor._eventListeners[target] = [];
-
-        Meteor._eventListeners[target].push(listener);
+Meteor._addEventListener = function(listener) {
+  for (const target of listener.listen) {
+    if (!Obj.isArray(Meteor._eventListeners[target])) {
+      Meteor._eventListeners[target] = [];
     }
+
+    Meteor._eventListeners[target].push(listener);
+  }
 };
 
 /**
@@ -41,22 +40,25 @@ Meteor._addEventListener = function(listener)
  * @private
  * @param   {Event}     event   The occuring event
  */
-Meteor._notifyEventListeners = function(event)
-{
-    if (Obj.isUndefined(Meteor._eventListeners[event.name]))
-		throw new ReferenceError("There is no event listener registered for the event named " + event.name + ".");
-        
-    for (let listener of Meteor._eventListeners[event.name])
-	{
-		if (listener.shouldQueue)
-		{
-			Meteor._queueEvent(listener, event);
-			continue;	
-		}
+Meteor._notifyEventListeners = function(event) {
+  if (Obj.isUndefined(Meteor._eventListeners[event.name])) {
+    throw new ReferenceError(
+      "There is no event listener registered for the event named " +
+        event.name +
+        "."
+    );
+  }
 
-		if (Meteor._processEvent(listener, event))
-			break;
-	}
+  for (const listener of Meteor._eventListeners[event.name]) {
+    if (listener.shouldQueue) {
+      Meteor._queueEvent(listener, event);
+      continue;
+    }
+
+    if (Meteor._processEvent(listener, event)) {
+      break;
+    }
+  }
 };
 
 /**
@@ -64,20 +66,22 @@ Meteor._notifyEventListeners = function(event)
  * @private
  * @param   {EventListener} listener    The handling event listener
  * @param   {Event}         event       The occuring event
+ * @return  {Boolean}                   Whether or not the propagation of the event should be stopped.
  */
-Meteor._processEvent = function(listener, event)
-{
-    let stopPropagation = false;
+Meteor._processEvent = function(listener, event) {
+  let stopPropagation = false;
 
-	if (listener.hasBeforeHook())
-		listener.beforeHandle(event);
+  if (listener.hasBeforeHook()) {
+    listener.beforeHandle(event);
+  }
 
-	stopPropagation = listener.handle(event);
+  stopPropagation = listener.handle(event);
 
-	if (listener.hasAfterHook())
-		listener.afterHandle(event);
+  if (listener.hasAfterHook()) {
+    listener.afterHandle(event);
+  }
 
-	return stopPropagation;
+  return stopPropagation;
 };
 
 /**
@@ -86,12 +90,12 @@ Meteor._processEvent = function(listener, event)
  * @param   {EventListener} listener    The handling event listener
  * @param   {Event}         event       The occuring event
  */
-Meteor._processQueuedEvent = function()
-{
-    let element = Meteor._queuedEvents.shift();
+Meteor._processQueuedEvent = function() {
+  const element = Meteor._queuedEvents.shift();
 
-	if (!Obj.isUndefined(element))
-		Meteor._processEvent(element.listener, element.event);
+  if (!Obj.isUndefined(element)) {
+    Meteor._processEvent(element.listener, element.event);
+  }
 };
 
 /**
@@ -100,34 +104,34 @@ Meteor._processQueuedEvent = function()
  * @param   {EventListener} listener    The handling event listener
  * @param   {Event}         event       The occuring event
  */
-Meteor._queueEvent = function(listener, event)
-{
-    let element = 
-    {
-        listener: listener,
-        event: event
-    };
+Meteor._queueEvent = function(listener, event) {
+  const element = {
+    listener,
+    event,
+  };
 
-    Meteor._queuedEvents.push(element);
+  Meteor._queuedEvents.push(element);
 };
 
 /**
  * Monitor all queued events at a specified interval.
- * @param   {Number} listener    The handling event listener
+ * @param   {Number} delay    The delay between two executions
  */
-Meteor.monitorQueuedEvents = function(delay)
-{
-    let interval = delay || 5000;
-    Meteor._eventMonitoring = Meteor.setInterval(Meteor._processQueuedEvent.bind(this), interval);
+Meteor.monitorQueuedEvents = function(delay) {
+  const interval = delay || 5000;
+
+  Meteor._eventMonitoring = Meteor.setInterval(
+    Meteor._processQueuedEvent.bind(this),
+    interval
+  );
 };
 
 /**
  * Stop monitoring all queued events.
  */
-Meteor.stopMonitoringQueuedEvents = function()
-{
-    Meteor.clearInterval(Meteor._eventMonitoring);
-	Meteor._eventMonitoring = undefined;
+Meteor.stopMonitoringQueuedEvents = function() {
+  Meteor.clearInterval(Meteor._eventMonitoring);
+  Meteor._eventMonitoring = undefined;
 };
 
 export { Event, EventListener };
