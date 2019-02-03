@@ -2800,6 +2800,11 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+jstoolbox@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/jstoolbox/-/jstoolbox-1.0.2.tgz#bf9dbdaf0661fac0eb3d30b179da4718a1c36595"
+  integrity sha512-2u/hQDD0M7rbDZNAPU3akVtBsZ1O5kuVrwPVnotQ0X2aYWVmFkt0jOEl8wfZGywYd6MO2aQszeZ0KpIiHw9+/g==
+
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"

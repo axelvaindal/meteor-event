@@ -10,7 +10,7 @@ export class EventListener {
     name,
     listen = [],
     shouldQueue = false,
-    disableAutoRegister = false,
+    autoRegister = true,
   } = {}) {
     if (this.constructor === EventListener)
       throw new TypeError("Event Listener is abstract.");
@@ -40,7 +40,7 @@ export class EventListener {
       this.listen = listen;
       this.shouldQueue = shouldQueue;
 
-      if (!disableAutoRegister) {
+      if (autoRegister) {
         this.register();
       }
     }
