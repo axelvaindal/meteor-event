@@ -1,0 +1,55 @@
+{
+  "name": "data-manufactory",
+  "private": true,
+  "version": "2.0.0",
+  "keywords": [
+    "event",
+    "meteor",
+  ],
+  "description": "Event package for MeteorJS framework.",
+  "main": "factory.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "xo"
+  },
+  "author": "axelvaindal",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "24.0.0",
+    "xo": "0.24.0"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "jsxBracketSameLine": true
+  },
+  "xo": {
+    "space": 2,
+    "prettier": true,
+    "rules": {
+      "promise/prefer-await-to-then": "warn"
+    },
+    "ignores": [
+      "node_modules"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "tests/**"
+        ],
+        "globals": [
+          "describe",
+          "test",
+          "expect",
+          "afterEach",
+          "beforeEach",
+          "beforeAll",
+          "jest",
+          "jasmine"
+        ]
+      }
+    ]
+  }
+}

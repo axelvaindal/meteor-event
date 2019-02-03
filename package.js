@@ -4,14 +4,14 @@ Package.describe(
 
     version: "2.0.0",
 
-    summary: "Event package for MeteorJS Framework.",
+    summary: "Event package for MeteorJS framework.",
 
     git: "https://github.com/M4dNation/meteor-event",
 });
 
 Npm.depends(
 {
-    "jstoolbox": "1.0.1"
+    "jstoolbox": "1.0.2"
 });
 
 Package.onUse(function(api) 
