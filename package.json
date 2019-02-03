@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "keywords": [
     "event",
-    "meteor",
+    "meteor"
   ],
   "description": "Event package for MeteorJS framework.",
   "main": "factory.js",
