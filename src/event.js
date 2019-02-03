@@ -1,4 +1,4 @@
-import { Obj } from "jstoolbox"; // eslint-disable-line import/no-unresolved
+import { Obj } from "jstoolbox";
 import { Meteor } from "meteor/meteor"; // eslint-disable-line import/no-unresolved
 
 export class Event {
