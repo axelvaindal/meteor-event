@@ -1,7 +1,7 @@
 # meteor-event
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Build Status](https://travis-ci.com/M4dNation/meteor-event.svg?branch=master)](https://travis-ci.com/M4dNation/meteor-event) ![](https://david-dm.org/M4dNation/meteor-event.svg) [![codecov](https://codecov.io/gh/M4dNation/meteor-event/branch/develop/graph/badge.svg)](https://codecov.io/gh/M4dNation/meteor-event)
+[![Build Status](https://travis-ci.com/M4dNation/meteor-event.svg?branch=master)](https://travis-ci.com/M4dNation/meteor-event) ![](https://david-dm.org/M4dNation/meteor-event.svg)
 
 ## Install
 
