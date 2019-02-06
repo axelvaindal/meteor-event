@@ -47,9 +47,11 @@ Meteor._notifyEventListeners = function(event) {
         event.name +
         "."
     );
+
     if (!event.skipFailing) {
       throw error;
     }
+
     return;
   }
 
