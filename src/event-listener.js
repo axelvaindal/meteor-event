@@ -7,7 +7,7 @@ export class EventListener {
    * @param	{PlainObject}	options		The configuration options of the listener
    */
   constructor({
-    name,
+    name = this.constructor.name,
     listen = [],
     shouldQueue = false,
     autoRegister = true,
