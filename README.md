@@ -33,7 +33,7 @@ import { EventListener } from "meteor/m4dnation:meteor-event";
 export class UserActionListener extends EventListener {
   constructor() {
     super({
-      name: "UserActionListener",
+      name: "My Listener", // default is class name, but you can use whatever you want
       listen: ["test"],
       shouldQueue: false, // If this is set to true, the process is queued
       autoRegister: true, // If this is set to false, you have to manually register the listener
