@@ -91,7 +91,7 @@ Meteor.methods({
 
 ## Authors
 
-`meteor-event` is maintained by M4dNation Company.
+`meteor-event` is maintained by M4dNation Company.  
 First version written by [axelvaindal](https://github.com/axelvaindal).
 
 ## Contributors
