@@ -56,7 +56,8 @@ import { Event } from "meteor/m4dnation:meteor-event";
 
 export class UserAddEmailEvent extends Event {
   constructor(options) {
-    super({ skipFailing: true });
+    // If skipFailing is true, not handling this event will only log the error in the console
+    super({ name: options.name, skipFailing: true });
     this.email = options.address;
   }
 }
