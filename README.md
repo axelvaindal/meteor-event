@@ -56,7 +56,7 @@ import { Event } from "meteor/m4dnation:meteor-event";
 
 export class UserAddEmailEvent extends Event {
   constructor(options) {
-    super(options.name);
+    super({ skipFailing: true });
     this.email = options.address;
   }
 }
