@@ -6,7 +6,7 @@ export class Event {
    * Create an Event to emit.
    * @param	{String}	name	The name of the event
    */
-  constructor(name) {
+  constructor({ name, skipFailing = true }) {
     if (this.constructor === Event) {
       throw new TypeError("Event is abstract.");
     }
@@ -16,6 +16,7 @@ export class Event {
     }
 
     this.name = name;
+    this.skipFailing = skipFailing;
   }
 
   /**

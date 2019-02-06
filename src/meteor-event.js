@@ -42,11 +42,15 @@ Meteor._addEventListener = function(listener) {
  */
 Meteor._notifyEventListeners = function(event) {
   if (Obj.isUndefined(Meteor._eventListeners[event.name])) {
-    throw new ReferenceError(
+    const error = new ReferenceError(
       "There is no event listener registered for the event named " +
         event.name +
         "."
     );
+    if (!event.skipFailing) {
+      throw error;
+    }
+    return;
   }
 
   for (const listener of Meteor._eventListeners[event.name]) {
