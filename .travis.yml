@@ -8,8 +8,6 @@ notifications:
   email: false
 script:
   - yarn lint
-env:
-  - WEBHOOK_URL=https://discordapp.com/api/webhooks/541009854421270549/VI9WeqNqREPvkggRk2TMlRRPz5YEkI7x2yesH5MeejLqihDpRqcO3tpmqQ1aYBzE4PsQ
 after_success:
   - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
