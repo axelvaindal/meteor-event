@@ -1,6 +1,8 @@
 import { Obj } from "jstoolbox";
-import { Meteor } from "meteor/meteor"; // eslint-disable-line import/no-unresolved
 
+/**
+ *
+ */
 export class Event {
   /**
    * Create an Event to emit.
@@ -17,12 +19,5 @@ export class Event {
 
     this.name = name;
     this.skipFailing = skipFailing;
-  }
-
-  /**
-   * Alert the dispatcher about an occurring event.
-   */
-  fire() {
-    Meteor._notifyEventListeners(this);
   }
 }

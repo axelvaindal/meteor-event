@@ -1,7 +1,7 @@
 Package.describe({
   name: "m4dnation:meteor-event",
 
-  version: "2.3.0",
+  version: "3.0.0-alpha.1",
 
   summary: "Event package for MeteorJS framework.",
 

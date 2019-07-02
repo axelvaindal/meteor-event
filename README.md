@@ -22,7 +22,7 @@ This is exactly what you can do thanks to this package.
 ## Usage
 
 The package is based on two classes named `Event` and `EventListener` which provide basic behavior.  
-Thus, you just have to inherit from these classes in order to create an Event Based Application.
+Thus, you just have to use these classes in order to create an Event Based Application.
 
 All of this is only available server-side (you cannot use this package in a Blaze Template or a React component).
 

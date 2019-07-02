@@ -11,37 +11,34 @@ export class EventListener {
     listen = [],
     shouldQueue = false,
     autoRegister = true,
+    beforeHandle,
+    handle,
+    afterHandle,
   } = {}) {
-    if (this.constructor === EventListener)
-      throw new TypeError("Event Listener is abstract.");
-
-    if (!Obj.isFunction(this.handle)) {
+    if (!Obj.isFunction(handle)) {
       throw new TypeError(
-        this.constructor.name + " must override the handle method."
+        `${this.constructor.name} must override the handle method.`
       );
     }
 
-    if (
-      !Obj.isUndefined(this.beforeHandle) &&
-      !Obj.isFunction(this.beforeHandle)
-    ) {
+    if (!Obj.isUndefined(beforeHandle) && !Obj.isFunction(beforeHandle)) {
       throw new TypeError("beforeHandle must be a function.");
     }
 
-    if (
-      !Obj.isUndefined(this.afterHandle) &&
-      !Obj.isFunction(this.afterHandle)
-    ) {
+    if (!Obj.isUndefined(afterHandle) && !Obj.isFunction(afterHandle)) {
       throw new TypeError("afterHandle must be a function.");
     }
 
-    if (this._isValid({ name, listen })) {
+    if (isValidListener({ name, listen })) {
       this.name = name;
       this.listen = listen;
       this.shouldQueue = shouldQueue;
+      this.beforeHandle = beforeHandle;
+      this.handle = handle;
+      this.afterHandle = afterHandle;
 
       if (autoRegister) {
-        this.register();
+        Meteor.register(this);
       }
     }
   }
@@ -61,47 +58,40 @@ export class EventListener {
   hasAfterHook() {
     return Obj.isFunction(this.afterHandle);
   }
+}
 
-  /**
-   * Register the listener to notify it whenever an event occurs.
-   */
-  register() {
-    Meteor._addEventListener(this);
+/**
+ * Evaluate if the options of the event listener are valid or not.
+ * @private
+ * @param		{PlainObject}	options		The configuration options of the event listener
+ * @return	{Boolean} 					True if the options are valid, false otherwise
+ */
+function isValidListener({ name, listen = [] } = {}) {
+  if (!Obj.isString(name) || Obj.isFalsy(name)) {
+    throw new TypeError("EventListener name must be a non-empty string.");
+  } else if (!isValidTarget(listen)) {
+    throw new TypeError("EventListener must listen to at least one event.");
   }
 
-  /**
-   * Evaluate if the options of the event listener are valid or not.
-   * @private
-   * @param		{PlainObject}	options		The configuration options of the event listener
-   * @return	{Boolean} 					True if the options are valid, false otherwise
-   */
-  _isValid({ name, listen = [] } = {}) {
-    if (!Obj.isString(name) || Obj.isFalsy(name)) {
-      throw new TypeError("EventListener name must be a non-empty string.");
-    } else if (!this._isValidTarget(listen)) {
-      throw new TypeError("EventListener must listen to at least one event.");
-    }
+  return true;
+}
 
-    return true;
+/**
+ * Evaluate if the target of the event listener is valid or not.
+ * @private
+ * @param		{Array}		listen	An array containing the name of the events to handle
+ * @return 	{Boolean} 			True if the event listener targets are valid, false otherwise
+ */
+function isValidTarget(listen) {
+  if (!Obj.isArray(listen) || Collection.isEmpty(listen)) {
+    return false;
   }
 
-  /**
-   * Evaluate if the target of the event listener is valid or not.
-   * @private
-   * @param		{Array}		listen	An array containing the name of the events to handle
-   * @return 	{Boolean} 			True if the event listener targets are valid, false otherwise
-   */
-  _isValidTarget(listen) {
-    if (!Obj.isArray(listen) || Collection.isEmpty(listen)) {
+  for (const eventName of listen) {
+    if (!Obj.isString(eventName) || Obj.isFalsy(eventName)) {
       return false;
     }
-
-    for (const eventName of listen) {
-      if (!Obj.isString(eventName) || Obj.isFalsy(eventName)) {
-        return false;
-      }
-    }
-
-    return true;
   }
+
+  return true;
 }
